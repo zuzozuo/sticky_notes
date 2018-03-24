@@ -8,9 +8,11 @@ class WhiteBoardController {
   }
 
   run() {
-    console.log("Biegnij")
+    //console.log("Biegnij")
     this.button.addEventListener("click", this.addNewSticky.bind(this))
     this.whiteBoard.addEventListener("removeMe", this.removeSticky.bind(this));
+    this.whiteBoard.addEventListener("setActive", this.changeActiveSticky.bind(
+      this));
     this.updateAmount();
   }
 
@@ -26,19 +28,59 @@ class WhiteBoardController {
   }
 
   removeSticky(event) {
-    console.log(event)
+    //console.log(event)
     for (let i = 0; i < this.listOfNotes.length; i++) {
       if (this.listOfNotes[i].stickyNote.uid == event.detail.uid) {
+        let oldZIndex = this.listOfNotes[i].getZIndex();
         this.listOfNotes[i].removeDiv();
-        console.log(this.listOfNotes.length)
         this.listOfNotes.splice(i, 1)
-        this.updateAmount();
 
-        for (let j = 0; j < this.listOfNotes.length; j++) {
-          this.listOfNotes[j].setZIndex(j);
+        for (let k = 0; k < this.listOfNotes.length; k++) {
+          if (oldZIndex < this.listOfNotes[k].getZIndex()) {
+            let newZIndex = this.listOfNotes[k].getZIndex() - 1;
+            this.listOfNotes[k].setZIndex(newZIndex);
+          }
         }
 
+        this.updateAmount();
+        /*for (let j = 0; j < this.listOfNotes.length; j++) {
+          this.listOfNotes[j].setZIndex(j);
+        }*/
         break;
+      }
+    }
+  }
+
+  changeActiveSticky(event) {
+    console.log("Odebralem A");
+    for (let i = 0; i < this.listOfNotes.length; i++) {
+
+      if (this.listOfNotes[i].stickyNote.uid == event.detail.uid) {
+
+        let oldZIndex = this.listOfNotes[i].getZIndex();
+        let newZIndex = this.listOfNotes.length;
+
+        this.listOfNotes[i].setZIndex(newZIndex)
+
+        for (let j = 0; j < this.listOfNotes.length; j++) {
+          if (oldZIndex < this.listOfNotes[j].getZIndex()) {
+            newZIndex = this.listOfNotes[j].getZIndex() - 1;
+            this.listOfNotes[j].setZIndex(newZIndex);
+          }
+        }
+        this.changeColor();
+        break;
+      }
+    }
+
+  }
+
+  changeColor() {
+    for (let i = 0; i < this.listOfNotes.length; i++) {
+      if (this.listOfNotes[i].getZIndex() == this.listOfNotes.length - 1) {
+        this.listOfNotes[i].setStyle("active")
+      } else {
+        this.listOfNotes[i].setStyle(" ");
       }
     }
   }
@@ -47,4 +89,6 @@ class WhiteBoardController {
     this.amountOfNotes.innerHTML = "Przebieg: " + this.allNotes + "<br>" +
       "Na tablicy: " + this.listOfNotes.length;
   }
+
+
 }

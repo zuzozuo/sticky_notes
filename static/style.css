@@ -69,3 +69,7 @@ button{
   left: 0;
   top: 0;
 }
+
+.active{
+  background-color: rgb(165, 100, 230);
+}

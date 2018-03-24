@@ -34,11 +34,16 @@ class NoteController {
     this.removeSticky.addEventListener("click", this.removeMe.bind(this));
     this.div.addEventListener("mousedown", this.mouseDown.bind(this));
     this.resizeDiv.addEventListener("mousedown", this.resizeDown.bind(this));
+    this.div.addEventListener("mousedown", this.setActive.bind(this));
   }
 
   setZIndex(value) {
     this.div.style.zIndex = value;
     this.stickyNote.update(zIndex, value);
+  }
+
+  getZIndex() {
+    return this.stickyNote.z;
   }
 
 
@@ -48,7 +53,7 @@ class NoteController {
   }
 
   resizeDown(event) {
-    //console.log("resizeDown")
+    console.log("resizeDown")
     event.stopPropagation();
     let sticky = this.stickyNote;
     let div = this.div;
@@ -68,15 +73,17 @@ class NoteController {
     document.addEventListener("mouseup", resizeUp);
 
     function resizeUp() {
-      //console.log("resizeUp")
-      sticky.update(noteHeight, resH)
-      sticky.update(noteWidth, resW)
+      console.log("resizeUp")
+      if (resH > 0 && resW > 0) {
+        sticky.update(noteHeight, resH)
+        sticky.update(noteWidth, resW)
+      }
       document.removeEventListener("mouseup", resizeUp);
       document.removeEventListener("mousemove", resizeMove);
     }
 
     function resizeMove(event) {
-      //console.log("resizeMove")
+      console.log("resizeMove")
       resW = startW + event.clientX - posX;
       resH = startH + event.clientY - posY;
 
@@ -130,5 +137,20 @@ class NoteController {
     });
 
     this.whiteBoard.dispatchEvent(rEvent);
+  }
+
+  setActive() {
+    console.log("Active");
+    let aEvent = new CustomEvent("setActive", {
+      detail: {
+        uid: this.stickyNote.uid
+      }
+    });
+
+    this.whiteBoard.dispatchEvent(aEvent);
+  }
+
+  setStyle(name) {
+    this.div.className = name + " stickyNote";
   }
 }
