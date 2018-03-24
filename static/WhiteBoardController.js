@@ -11,8 +11,8 @@ class WhiteBoardController {
     //console.log("Biegnij")
     this.button.addEventListener("click", this.addNewSticky.bind(this))
     this.whiteBoard.addEventListener("removeMe", this.removeSticky.bind(this));
-    this.whiteBoard.addEventListener("setActive", this.changeActiveSticky.bind(
-      this));
+    //this.whiteBoard.addEventListener("setActive", this.changeActiveSticky.bind(
+    //  this));
     this.updateAmount();
   }
 
@@ -51,7 +51,7 @@ class WhiteBoardController {
     }
   }
 
-  changeActiveSticky(event) {
+  /*changeActiveSticky(event) {
     console.log("Odebralem A");
     for (let i = 0; i < this.listOfNotes.length; i++) {
 
@@ -83,7 +83,7 @@ class WhiteBoardController {
         this.listOfNotes[i].setStyle(" ");
       }
     }
-  }
+  }*/
 
   updateAmount() {
     this.amountOfNotes.innerHTML = "Przebieg: " + this.allNotes + "<br>" +

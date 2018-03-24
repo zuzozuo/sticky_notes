@@ -31,10 +31,11 @@ class NoteController {
     this.div.appendChild(this.noteArea)
     this.div.appendChild(this.resizeDiv)
     this.whiteBoard.appendChild(this.div);
-    this.removeSticky.addEventListener("click", this.removeMe.bind(this));
+
     this.div.addEventListener("mousedown", this.mouseDown.bind(this));
     this.resizeDiv.addEventListener("mousedown", this.resizeDown.bind(this));
     this.div.addEventListener("mousedown", this.setActive.bind(this));
+    this.removeSticky.addEventListener("mousedown", this.removeMe.bind(this));
   }
 
   setZIndex(value) {
@@ -102,17 +103,19 @@ class NoteController {
   }
 
   mouseDown(event) {
-    //console.log("mouseDown")
+    console.log("mouseDown")
     let div = this.div;
     let posX = event.clientX;
     let posY = event.clientY;
+    div.className = "active stickyNote";
     document.addEventListener("mouseup", mouseUp)
     document.addEventListener("mousemove", mouseMove);
 
     function mouseUp() {
       document.removeEventListener("mouseup", mouseUp)
       document.removeEventListener("mousemove", mouseMove);
-      //console.log("mouseUp")
+      div.className = "stickyNote";
+      console.log("mouseUp")
     }
 
     function mouseMove(event) {
@@ -128,8 +131,9 @@ class NoteController {
   }
 
 
-  removeMe() {
+  removeMe(event) {
     console.log("removeMe");
+    event.stopPropagation();
     let rEvent = new CustomEvent("removeMe", {
       detail: {
         uid: this.stickyNote.uid
@@ -153,4 +157,5 @@ class NoteController {
   setStyle(name) {
     this.div.className = name + " stickyNote";
   }
+
 }
