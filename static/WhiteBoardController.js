@@ -5,30 +5,52 @@ class WhiteBoardController {
     this.amountOfNotes = document.getElementById("amount");
     this.listOfNotes = [];
     this.allNotes = 0;
+
   }
 
   run() {
-    //console.log("Biegnij")
     this.button.addEventListener("click", this.addNewSticky.bind(this))
     this.whiteBoard.addEventListener("removeMe", this.removeSticky.bind(this));
-    //this.whiteBoard.addEventListener("setActive", this.changeActiveSticky.bind(
-    //  this));
+    this.whiteBoard.addEventListener("setActive", this.changeActiveSticky.bind(
+      this));
+    this.whiteBoard.addEventListener("setTextEditor", this.getTextEditor.bind(
+      this));
+    document.getElementById("toConfirm").addEventListener("click", this.changeText
+      .bind(this))
     this.updateAmount();
+
   }
+
+  getTextEditor(event) {
+    document.getElementById("tinyMCE").style.display = "block";
+    document.getElementById("tinyMCE").dataset.uid = event.detail.uid;
+    tinymce.activeEditor.setContent(event.detail.text);
+  }
+
+  changeText() {
+    let attrib = document.getElementById("tinyMCE").dataset.uid
+    for (let i = 0; i < this.listOfNotes.length; i++) {
+      if (this.listOfNotes[i].stickyNote.uid == attrib) {
+        let text = tinymce.activeEditor.getContent();
+        this.listOfNotes[i].updateText(text);
+      }
+    }
+
+    document.getElementById("tinyMCE").style.display = "none";
+  }
+
 
   addNewSticky() {
     let newSticky = new Note(100, 100, this.listOfNotes.length, 200, 200,
-      this.allNotes);
+      this.allNotes, "NEW NOTE   " + this.listOfNotes.length);
     let newController = new NoteController(newSticky, this.whiteBoard);
     this.listOfNotes.push(newController);
     newController.showDiv();
     this.allNotes += 1;
     this.updateAmount();
-    //console.log(this.listOfNotes);
   }
 
   removeSticky(event) {
-    //console.log(event)
     for (let i = 0; i < this.listOfNotes.length; i++) {
       if (this.listOfNotes[i].stickyNote.uid == event.detail.uid) {
         let oldZIndex = this.listOfNotes[i].getZIndex();
@@ -43,15 +65,12 @@ class WhiteBoardController {
         }
 
         this.updateAmount();
-        /*for (let j = 0; j < this.listOfNotes.length; j++) {
-          this.listOfNotes[j].setZIndex(j);
-        }*/
         break;
       }
     }
   }
 
-  /*changeActiveSticky(event) {
+  changeActiveSticky(event) {
     console.log("Odebralem A");
     for (let i = 0; i < this.listOfNotes.length; i++) {
 
@@ -59,31 +78,23 @@ class WhiteBoardController {
 
         let oldZIndex = this.listOfNotes[i].getZIndex();
         let newZIndex = this.listOfNotes.length;
-
+        console.log(oldZIndex, newZIndex)
         this.listOfNotes[i].setZIndex(newZIndex)
 
         for (let j = 0; j < this.listOfNotes.length; j++) {
           if (oldZIndex < this.listOfNotes[j].getZIndex()) {
             newZIndex = this.listOfNotes[j].getZIndex() - 1;
             this.listOfNotes[j].setZIndex(newZIndex);
+            this.listOfNotes[j].saveZIndex();
           }
         }
-        this.changeColor();
         break;
       }
+
     }
 
   }
 
-  changeColor() {
-    for (let i = 0; i < this.listOfNotes.length; i++) {
-      if (this.listOfNotes[i].getZIndex() == this.listOfNotes.length - 1) {
-        this.listOfNotes[i].setStyle("active")
-      } else {
-        this.listOfNotes[i].setStyle(" ");
-      }
-    }
-  }*/
 
   updateAmount() {
     this.amountOfNotes.innerHTML = "Przebieg: " + this.allNotes + "<br>" +

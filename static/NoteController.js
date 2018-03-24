@@ -6,9 +6,13 @@ class NoteController {
     this.resizeDiv = null;
     this.noteArea = null;
     this.removeSticky = null;
+
   }
 
   showDiv() {
+    tinymce.init({
+      selector: '#toWrite'
+    });
     this.div = document.createElement("div");
     this.div.className = "stickyNote";
     this.div.style.height = this.stickyNote.height + "px";
@@ -16,26 +20,34 @@ class NoteController {
     this.div.style.height = this.stickyNote.height + "px";
     this.div.style.zIndex = this.stickyNote.z;
 
-
     this.resizeDiv = document.createElement("div");
     this.resizeDiv.className = "resizeIcon";
 
     this.noteArea = document.createElement("div");
     this.noteArea.className = "noteArea";
-    this.noteArea.innerHTML = "NEW NOTE!!!" + this.stickyNote.uid;
+    this.noteArea.innerHTML = this.stickyNote.text;
+
+
+    //this.noteArea.innerHTML = "NEW NO!!!" + this.stickyNote.uid;
 
     this.removeSticky = document.createElement("div");
     this.removeSticky.className = "removeSticky";
 
-    this.div.appendChild(this.removeSticky)
-    this.div.appendChild(this.noteArea)
-    this.div.appendChild(this.resizeDiv)
+    this.textEditor = document.createElement("div");
+    this.textEditor.className = "textEditor";
+
+    this.div.appendChild(this.removeSticky);
+    this.div.appendChild(this.noteArea);
+    this.div.appendChild(this.resizeDiv);
+    this.div.appendChild(this.textEditor);
     this.whiteBoard.appendChild(this.div);
 
     this.div.addEventListener("mousedown", this.mouseDown.bind(this));
     this.resizeDiv.addEventListener("mousedown", this.resizeDown.bind(this));
     this.div.addEventListener("mousedown", this.setActive.bind(this));
     this.removeSticky.addEventListener("mousedown", this.removeMe.bind(this));
+    this.textEditor.addEventListener("mousedown", this.setTextEditor.bind(
+      this));
   }
 
   setZIndex(value) {
@@ -43,11 +55,13 @@ class NoteController {
     this.stickyNote.update(zIndex, value);
   }
 
+  saveZIndex() {
+    this.stickyNote.save([zIndex])
+  }
+
   getZIndex() {
     return this.stickyNote.z;
   }
-
-
 
   removeDiv() {
     this.whiteBoard.removeChild(this.div);
@@ -78,6 +92,8 @@ class NoteController {
       if (resH > 0 && resW > 0) {
         sticky.update(noteHeight, resH)
         sticky.update(noteWidth, resW)
+
+        sticky.save([noteHeight, noteWidth])
       }
       document.removeEventListener("mouseup", resizeUp);
       document.removeEventListener("mousemove", resizeMove);
@@ -104,9 +120,12 @@ class NoteController {
 
   mouseDown(event) {
     console.log("mouseDown")
+    let sticky = this.stickyNote;
     let div = this.div;
     let posX = event.clientX;
     let posY = event.clientY;
+    let finalPosX = 0;
+    let finalPosY = 0;
     div.className = "active stickyNote";
     document.addEventListener("mouseup", mouseUp)
     document.addEventListener("mousemove", mouseMove);
@@ -115,6 +134,15 @@ class NoteController {
       document.removeEventListener("mouseup", mouseUp)
       document.removeEventListener("mousemove", mouseMove);
       div.className = "stickyNote";
+      //this.stickyNote.update(note)
+
+      if (finalPosX > 0 && finalPosY > 0) {
+        sticky.update(noteX, finalPosX);
+        sticky.update(noteY, finalPosY);
+        sticky.save([noteX, noteY]);
+      }
+
+
       console.log("mouseUp")
     }
 
@@ -123,9 +151,11 @@ class NoteController {
       let resY = posY - event.clientY;
       posX = event.clientX;
       posY = event.clientY;
+      finalPosY = div.offsetTop - resY;
+      finalPosX = div.offsetLeft - resX;
 
-      div.style.top = (div.offsetTop - resY) + "px";
-      div.style.left = (div.offsetLeft - resX) + "px";
+      div.style.top = finalPosY + "px";
+      div.style.left = finalPosX + "px";
 
     }
   }
@@ -144,7 +174,7 @@ class NoteController {
   }
 
   setActive() {
-    console.log("Active");
+    //console.log("Active");
     let aEvent = new CustomEvent("setActive", {
       detail: {
         uid: this.stickyNote.uid
@@ -156,6 +186,24 @@ class NoteController {
 
   setStyle(name) {
     this.div.className = name + " stickyNote";
+  }
+
+  setTextEditor() {
+    console.log("Editor");
+    let eEvent = new CustomEvent("setTextEditor", {
+      detail: {
+        uid: this.stickyNote.uid,
+        text: this.stickyNote.text
+      }
+    });
+
+    this.whiteBoard.dispatchEvent(eEvent);
+  }
+
+  updateText(text) {
+    this.stickyNote.update(newText, text);
+    this.stickyNote.save([newText]);
+    this.noteArea.innerHTML = this.stickyNote.text;
   }
 
 }

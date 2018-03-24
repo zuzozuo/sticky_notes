@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="style.css" type="text/css" />
+    <script src="tinymce/tinymce.min.js"></script>
     <script src="WhiteBoardController.js"></script>
     <script src="NoteController.js"></script>
     <script src="Note.js"></script>
@@ -10,6 +11,10 @@
     <title>Lodówka</title>
   </head>
   <body>
+    <div id="tinyMCE">
+      <textarea id="toWrite"></textarea>
+      <button id="toConfirm">BLEBLE</button>
+    </div>
     <div id="whiteBoard"></div>
     <div id="amount"></div>
     <button id="addNote">+</button>

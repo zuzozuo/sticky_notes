@@ -19,7 +19,7 @@ body{
   overflow: hidden;
 }
 
-button{
+#addNote{
   position: absolute;
   left: 0;
   top: 0;
@@ -70,6 +70,44 @@ button{
   top: 0;
 }
 
+.textEditor{
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  bottom: 0;
+  right: 30px;
+  border: 1px solid black;
+  background-image: url("img/edit.png");
+  background-size: 30px 30px;
+}
+
 .active{
   background-color: rgb(165, 100, 230);
+}
+
+#tinyMCE{
+  width: 500px;
+  height: 300px;
+  border: 1px solid black;
+  position: absolute;
+  left: 30%;
+  top: 30%;
+  z-index: 500;
+  display: none;
+}
+
+#toWrite{
+  height: 200px;
+  width: 200px;
+  position: absolute;
+
+}
+
+#toConfirm{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 15px;
+  width: 100px;
+  height: 30px;
 }
