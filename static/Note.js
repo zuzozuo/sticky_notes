@@ -6,20 +6,20 @@ const noteX = 5;
 const noteY = 6;
 
 class Note {
-  constructor(x, y, z, width, height, text) {
+  constructor(x, y, z, width, height, text, uid) {
     this.z = z;
     this.width = width;
     this.height = height;
     this.y = y;
     this.x = x;
     this.text = text;
-    this.uid = 'dupa'
+    this.uid = uid;
   }
 
 
   create(func) {
     let xhttp = new XMLHttpRequest();
-    let obj = this.save([noteX, noteY, noteHeight, newText, zIndex]);
+    let obj = this.save([noteX, noteY, noteHeight, noteWidth, newText, zIndex]);
     let json = JSON.stringify(obj)
     let that = this;
     xhttp.onreadystatechange = function() {

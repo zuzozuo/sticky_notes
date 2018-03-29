@@ -9,6 +9,31 @@ class WhiteBoardController {
   }
 
   run() {
+    let that = this;
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var recivedData = JSON.parse(this.responseText)
+        if (recivedData.length > 0) {
+          for (let i = 0; i < recivedData.length; i++) {
+            var newSticky = new Note(recivedData[i].positionX, recivedData[
+                i].positionY,
+              recivedData[i].z, recivedData[i].width, recivedData[i].height,
+              recivedData[i].text, recivedData[i]._id);
+            var newController = new NoteController(newSticky, that.whiteBoard);
+            that.listOfNotes.push(newController);
+            newController.showDiv();
+            that.allNotes += 1;
+            that.updateAmount();
+          }
+        }
+      }
+    };
+    xhttp.open("GET", "ajax", true);
+    xhttp.send();
+
+
+
     this.button.addEventListener("click", this.addNewSticky.bind(this))
     this.whiteBoard.addEventListener("removeMe", this.removeSticky.bind(this));
     this.whiteBoard.addEventListener("setActive", this.changeActiveSticky.bind(
@@ -47,7 +72,7 @@ class WhiteBoardController {
 
   addNewSticky() {
     let newSticky = new Note(100, 100, this.listOfNotes.length, 200, 200,
-      "NEW NOTE   " + this.listOfNotes.length);
+      "NEW NOTE   " + this.listOfNotes.length, " ");
     newSticky.create(() => {
       let newController = new NoteController(newSticky, this.whiteBoard);
       this.listOfNotes.push(newController);

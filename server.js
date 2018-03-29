@@ -24,6 +24,12 @@ function getData(req, res) {
 
 }
 
+function loadCards(req, res) {
+  db.find({}, function(err, docs) {
+    res.end(JSON.stringify(docs));
+  });
+}
+
 db.loadDatabase();
 
 http.createServer(function(req, res) {
@@ -61,12 +67,12 @@ http.createServer(function(req, res) {
         getData(req, res);
         break;
       case "GET":
+        loadCards(req, res);
         break;
       case "PUT":
         break;
       case "DELETE":
         break;
-
     }
   } else {
     fs.readFile("static" + url, function(error, data) {
