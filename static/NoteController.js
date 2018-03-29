@@ -31,9 +31,6 @@ class NoteController {
     this.noteArea.className = "noteArea";
     this.noteArea.innerHTML = this.stickyNote.text;
 
-
-    //this.noteArea.innerHTML = "NEW NO!!!" + this.stickyNote.uid;
-
     this.removeSticky = document.createElement("div");
     this.removeSticky.className = "removeSticky";
 

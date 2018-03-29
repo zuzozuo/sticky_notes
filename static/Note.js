@@ -6,14 +6,31 @@ const noteX = 5;
 const noteY = 6;
 
 class Note {
-  constructor(x, y, z, width, height, uid, text) {
+  constructor(x, y, z, width, height, text) {
     this.z = z;
     this.width = width;
     this.height = height;
     this.y = y;
     this.x = x;
-    this.uid = uid;
     this.text = text;
+    this.uid = 'dupa'
+  }
+
+
+  create(func) {
+    let xhttp = new XMLHttpRequest();
+    let obj = this.save([noteX, noteY, noteHeight, newText, zIndex]);
+    let json = JSON.stringify(obj)
+    let that = this;
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        that.uid = this.responseText;
+        console.log(that)
+        return func();
+      }
+    };
+    xhttp.open("POST", "ajax", true);
+    xhttp.send(json);
   }
 
   update(mode, value) {
@@ -38,7 +55,7 @@ class Note {
     }
   }
 
-  save(parameters) {
+  save(parameters) { //put
     let obj = {};
 
     for (let i = 0; i < parameters.length; i++) {
@@ -64,7 +81,7 @@ class Note {
       }
     }
 
-    console.log(obj)
+    return obj;
   }
 
 }

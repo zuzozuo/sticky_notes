@@ -47,12 +47,14 @@ class WhiteBoardController {
 
   addNewSticky() {
     let newSticky = new Note(100, 100, this.listOfNotes.length, 200, 200,
-      this.allNotes, "NEW NOTE   " + this.listOfNotes.length);
-    let newController = new NoteController(newSticky, this.whiteBoard);
-    this.listOfNotes.push(newController);
-    newController.showDiv();
-    this.allNotes += 1;
-    this.updateAmount();
+      "NEW NOTE   " + this.listOfNotes.length);
+    newSticky.create(() => {
+      let newController = new NoteController(newSticky, this.whiteBoard);
+      this.listOfNotes.push(newController);
+      newController.showDiv();
+      this.allNotes += 1;
+      this.updateAmount();
+    });
   }
 
   removeSticky(event) {
@@ -77,6 +79,7 @@ class WhiteBoardController {
 
   changeActiveSticky(event) {
     console.log("Odebralem A");
+    console.log(event.detail.uid)
     for (let i = 0; i < this.listOfNotes.length; i++) {
 
       if (this.listOfNotes[i].stickyNote.uid == event.detail.uid) {
