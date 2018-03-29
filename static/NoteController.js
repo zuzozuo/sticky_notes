@@ -21,7 +21,8 @@ class NoteController {
     this.div.className = "stickyNote";
     this.div.style.height = this.stickyNote.height + "px";
     this.div.style.width = this.stickyNote.width + "px";
-    this.div.style.height = this.stickyNote.height + "px";
+    this.div.style.left = this.stickyNote.x + "px";
+    this.div.style.top = this.stickyNote.y + "px";
     this.div.style.zIndex = this.stickyNote.z;
 
     this.resizeDiv = document.createElement("div");
@@ -69,7 +70,7 @@ class NoteController {
   }
 
   resizeDown(event) {
-    console.log("resizeDown")
+    //console.log("resizeDown")
     event.stopPropagation();
     let sticky = this.stickyNote;
     let div = this.div;
@@ -89,7 +90,7 @@ class NoteController {
     document.addEventListener("mouseup", resizeUp);
 
     function resizeUp() {
-      console.log("resizeUp")
+      //console.log("resizeUp")
       if (resH > 0 && resW > 0) {
         sticky.update(noteHeight, resH)
         sticky.update(noteWidth, resW)
@@ -101,7 +102,7 @@ class NoteController {
     }
 
     function resizeMove(event) {
-      console.log("resizeMove")
+      //console.log("resizeMove")
       resW = startW + event.clientX - posX;
       resH = startH + event.clientY - posY;
 
@@ -120,7 +121,7 @@ class NoteController {
   }
 
   mouseDown(event) {
-    console.log("mouseDown")
+    //console.log("mouseDown")
     let sticky = this.stickyNote;
     let div = this.div;
     let posX = event.clientX;
@@ -144,7 +145,7 @@ class NoteController {
       }
 
 
-      console.log("mouseUp")
+      //console.log("mouseUp")
     }
 
     function mouseMove(event) {
@@ -163,7 +164,7 @@ class NoteController {
 
 
   removeMe(event) {
-    console.log("removeMe");
+    //console.log("removeMe");
     event.stopPropagation();
     let rEvent = new CustomEvent("removeMe", {
       detail: {
@@ -190,7 +191,7 @@ class NoteController {
   }
 
   setTextEditor() {
-    console.log("Editor");
+    //console.log("Editor");
     let eEvent = new CustomEvent("setTextEditor", {
       detail: {
         uid: this.stickyNote.uid,

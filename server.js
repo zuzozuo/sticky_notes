@@ -11,7 +11,6 @@ var db = new Datastore({
 function getData(req, res) {
   var allData = "";
   req.on("data", function(data) {
-    console.log("data: " + data)
     allData += data;
   })
 
@@ -30,10 +29,42 @@ function loadCards(req, res) {
   });
 }
 
+function updateCards(req, res) {
+  var allData = "";
+  req.on("data", function(data) {
+    allData += data;
+  })
+
+  req.on("end", function(data) {
+    var parsedJSON = JSON.parse(allData);
+    db.update({
+      _id: parsedJSON.uid
+    }, {
+      $set: parsedJSON.tempObj
+    }, {}, function(err, numReplaced) {
+      res.end();
+    })
+  })
+}
+
+function removeCard(req, res) {
+  var allData = "";
+  req.on("data", function(data) {
+    allData += data;
+
+  })
+
+  req.on("end", function(data) {
+    var parsedJSON = JSON.parse(allData);
+    db.remove({
+      _id: parsedJSON.uid
+    }, {})
+    res.end();
+  })
+}
 db.loadDatabase();
 
 http.createServer(function(req, res) {
-  console.log(req.url)
   var url = req.url,
     ext = path.extname(url),
     contentType;
@@ -61,7 +92,6 @@ http.createServer(function(req, res) {
       res.end();
     })
   } else if (url == "/ajax") {
-    console.log("DANE OD AJAXA")
     switch (req.method) {
       case "POST":
         getData(req, res);
@@ -70,8 +100,10 @@ http.createServer(function(req, res) {
         loadCards(req, res);
         break;
       case "PUT":
+        updateCards(req, res);
         break;
       case "DELETE":
+        removeCard(req, res);
         break;
     }
   } else {

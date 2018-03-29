@@ -20,6 +20,7 @@ class WhiteBoardController {
                 i].positionY,
               recivedData[i].z, recivedData[i].width, recivedData[i].height,
               recivedData[i].text, recivedData[i]._id);
+            console.log(newSticky)
             var newController = new NoteController(newSticky, that.whiteBoard);
             that.listOfNotes.push(newController);
             newController.showDiv();
@@ -30,6 +31,8 @@ class WhiteBoardController {
       }
     };
     xhttp.open("GET", "ajax", true);
+    xhttp.setRequestHeader("Content-type",
+      "text/plain");
     xhttp.send();
 
 
@@ -71,7 +74,7 @@ class WhiteBoardController {
 
 
   addNewSticky() {
-    let newSticky = new Note(100, 100, this.listOfNotes.length, 200, 200,
+    let newSticky = new Note(0, 0, this.listOfNotes.length, 200, 200,
       "NEW NOTE   " + this.listOfNotes.length, " ");
     newSticky.create(() => {
       let newController = new NoteController(newSticky, this.whiteBoard);
@@ -80,6 +83,23 @@ class WhiteBoardController {
       this.allNotes += 1;
       this.updateAmount();
     });
+  }
+
+  removeFromDB(uid) {
+    let that = this;
+    let obj = {
+      uid: uid
+    }
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log("Usunieto")
+      }
+    };
+    xhttp.open("DELETE", "ajax", true);
+    xhttp.setRequestHeader("Content-type",
+      "text/plain");
+    xhttp.send(JSON.stringify(obj));
   }
 
   removeSticky(event) {
@@ -95,7 +115,7 @@ class WhiteBoardController {
             this.listOfNotes[k].setZIndex(newZIndex);
           }
         }
-
+        this.removeFromDB(event.detail.uid)
         this.updateAmount();
         break;
       }
@@ -103,15 +123,15 @@ class WhiteBoardController {
   }
 
   changeActiveSticky(event) {
-    console.log("Odebralem A");
-    console.log(event.detail.uid)
+    //console.log("Odebralem A");
+    //console.log(event.detail.uid)
     for (let i = 0; i < this.listOfNotes.length; i++) {
 
       if (this.listOfNotes[i].stickyNote.uid == event.detail.uid) {
 
         let oldZIndex = this.listOfNotes[i].getZIndex();
         let newZIndex = this.listOfNotes.length;
-        console.log(oldZIndex, newZIndex)
+        //console.log(oldZIndex, newZIndex)
         this.listOfNotes[i].setZIndex(newZIndex)
 
         for (let j = 0; j < this.listOfNotes.length; j++) {

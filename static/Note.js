@@ -19,17 +19,21 @@ class Note {
 
   create(func) {
     let xhttp = new XMLHttpRequest();
-    let obj = this.save([noteX, noteY, noteHeight, noteWidth, newText, zIndex]);
+    let obj = this.tempFunc([noteX, noteY, noteHeight, noteWidth, newText,
+      zIndex
+    ]);
     let json = JSON.stringify(obj)
     let that = this;
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         that.uid = this.responseText;
-        console.log(that)
+        //console.log(that)
         return func();
       }
     };
     xhttp.open("POST", "ajax", true);
+    xhttp.setRequestHeader("Content-type",
+      "text/plain");
     xhttp.send(json);
   }
 
@@ -55,7 +59,7 @@ class Note {
     }
   }
 
-  save(parameters) { //put
+  tempFunc(parameters) {
     let obj = {};
 
     for (let i = 0; i < parameters.length; i++) {
@@ -82,6 +86,27 @@ class Note {
     }
 
     return obj;
+  }
+
+  save(parameters) { //put aktualizacja rekordow w bazie
+    let obj = this.tempFunc(parameters);
+    let xhttp = new XMLHttpRequest();
+    let temp = {
+      uid: this.uid,
+      tempObj: obj
+    };
+
+    console.log(temp)
+
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+
+      }
+    }
+    xhttp.open("PUT", "ajax", true);
+    xhttp.setRequestHeader("Content-type",
+      "text/plain");
+    xhttp.send(JSON.stringify(temp));
   }
 
 }
