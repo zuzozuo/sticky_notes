@@ -16,9 +16,14 @@ class WhiteBoardController {
     this.whiteBoard.addEventListener("setTextEditor", this.getTextEditor.bind(
       this));
     document.getElementById("toConfirm").addEventListener("click", this.changeText
-      .bind(this))
+      .bind(this));
+    document.getElementById("toCancel").addEventListener("click", this.cancelEdition
+      .bind(this));
     this.updateAmount();
+  }
 
+  cancelEdition() {
+    document.getElementById("tinyMCE").style.display = "none";
   }
 
   getTextEditor(event) {

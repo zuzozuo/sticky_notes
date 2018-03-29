@@ -87,8 +87,8 @@ body{
 
 #tinyMCE{
   width: 500px;
-  height: 300px;
-  border: 1px solid black;
+  min-height: 250px;
+  /*border: 1px solid black;*/
   position: absolute;
   left: 30%;
   top: 30%;
@@ -100,13 +100,23 @@ body{
   height: 200px;
   width: 200px;
   position: absolute;
-
 }
 
 #toConfirm{
   position: absolute;
+  z-index: 300;
   bottom: 0;
   right: 0;
+  font-size: 15px;
+  width: 100px;
+  height: 30px;
+}
+
+#toCancel{
+  position: absolute;
+  z-index: 300;
+  bottom: 0;
+  right: 105px;
   font-size: 15px;
   width: 100px;
   height: 30px;

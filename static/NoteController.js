@@ -10,9 +10,13 @@ class NoteController {
   }
 
   showDiv() {
+
     tinymce.init({
-      selector: '#toWrite'
+      selector: '#toWrite',
+      height: 120,
+      resize: false
     });
+
     this.div = document.createElement("div");
     this.div.className = "stickyNote";
     this.div.style.height = this.stickyNote.height + "px";
