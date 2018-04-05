@@ -62,6 +62,7 @@ function removeCard(req, res) {
 		res.end();
 	})
 }
+
 db.loadDatabase();
 
 http.createServer(function(req, res) {
