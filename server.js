@@ -6,6 +6,7 @@ var qs = require("querystring");
 var db = new Datastore({
 	filename: 'data/database.db'
 });
+var port = Number(process.env.PORT || 3000);
 
 
 function getData(req, res) {
@@ -116,7 +117,7 @@ http.createServer(function(req, res) {
 			res.end();
 		})
 	}
-}).listen(8080);
+}).listen(port);
 
 
 console.log("Start serwera")
